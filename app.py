@@ -117,13 +117,10 @@ def weather(address):
             aqi = int(item['aqi'])       # AQI 數值
             aqi_status = ['良好','普通','對敏感族群不健康','對所有族群不健康','非常不健康','危害']
             msg = aqi_status[aqi//50]    # 除以五十之後無條件捨去，取得整數
-
+            print(f'\n\nAQI：{aqi}，空氣品質{msg}')
             for k in result:
-                print(f'k = {k}')
-                print(f'name = {name}')
                 if name in k:
                     result[k] = result[k] + f'\n\nAQI：{aqi}，空氣品質{msg}。'
-                    print("get" + result[k])
     except:
         pass
 
