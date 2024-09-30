@@ -52,7 +52,6 @@ def earth_quake():
 # 取得某個地點的氣象資訊，整合氣象預報與空氣品質
 def weather(address):
     result = {}
-    code = '你的氣象 token'
     # 即時天氣
     try:
         url = [f'https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization={code}',
