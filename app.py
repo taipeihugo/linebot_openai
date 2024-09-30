@@ -114,21 +114,14 @@ def weather(address):
             sitename = item['sitename']  # 區域
             name = f'{county}{sitename}'
             aqi = int(item['aqi'])       # AQI 數值
-            aqi_status = ['良好','普通','對敏感族群不健康','對所有族群不健康','非常不健康','危害']
-            msg = aqi_status[aqi//50]    # 除以五十之後無條件捨去，取得整數
+            aqi_status = ['良好', '普通', '對敏感族群不健康', '對所有族群不健康', '非常不健康', '危害']
+            msg = aqi_status[aqi // 50]  # 除以五十之後無條件捨去，取得整數
 
             for k in result:
                 if name in k:
-                    result[k] = result[k] + f'\n\nAQI：{aqi}，空氣品質{msg}。'
-    except:
-        pass
-
-    output = '找不到氣象資訊'
-    for i in result:
-        if i in address: # 如果地址裡存在 key 的名稱
-            output = f'「{address}」{result[i]}'
-            break
-    return output
+                    result[k] += f'\n\nAQI：{aqi}，空氣品質{msg}。'
+    except Exception as e:
+        print(f"Error fetching AQI data: {e}")
 
 def cctv(msg):
     try:
