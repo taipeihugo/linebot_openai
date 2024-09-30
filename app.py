@@ -52,6 +52,7 @@ def earth_quake():
 # 取得某個地點的氣象資訊，整合氣象預報與空氣品質
 def weather(address):
     result = {}
+    code = '你的氣象 token'
     # 即時天氣
     try:
         url = [f'https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization={code}',
@@ -70,6 +71,7 @@ def weather(address):
                     result[f'{city}{area}'] = f'目前天氣狀況「{weather}」，溫度 {temp} 度，相對濕度 {humid}%！'
     except:
         pass
+
 
     # 氣象預報
     api_list = {"宜蘭縣":"F-D0047-001","桃園市":"F-D0047-005","新竹縣":"F-D0047-009","苗栗縣":"F-D0047-013",
@@ -110,23 +112,25 @@ def weather(address):
         data = req.json()
         records = data['records']
         for item in records:
-            county = item['county']
-            sitename = item['sitename']
+            county = item['county']      # 縣市
+            sitename = item['sitename']  # 區域
             name = f'{county}{sitename}'
-            aqi = item['aqi']  # 先不轉換成整數，檢查是否為有效數字
-            
-            if aqi.isdigit():
-                aqi = int(aqi)
-                aqi_status = ['良好', '普通', '對敏感族群不健康', '對所有族群不健康', '非常不健康', '危害']
-                msg = aqi_status[aqi // 50]
-                result[name] = f'AQI：{aqi}，空氣品質{msg}'
-            else:
-                # 如果 AQI 不是有效數字，可以提供一個預設訊息
-                result[name] = '無法取得 AQI 數據'
+            aqi = int(item['aqi'])       # AQI 數值
+            aqi_status = ['良好','普通','對敏感族群不健康','對所有族群不健康','非常不健康','危害']
+            msg = aqi_status[aqi//50]    # 除以五十之後無條件捨去，取得整數
 
+            for k in result:
+                if name in k:
+                    result[k] = result[k] + f'\n\nAQI：{aqi}，空氣品質{msg}。'
+    except:
+        pass
 
-    except Exception as e:
-        print(f"Error fetching AQI data: {e}")
+    output = '找不到氣象資訊'
+    for i in result:
+        if i in address: # 如果地址裡存在 key 的名稱
+            output = f'「{address}」{result[i]}'
+            break
+    return output
 
 def cctv(msg):
     try:
@@ -160,7 +164,7 @@ def linebot():
         type = json_data['events'][0]['message']['type']
         if type == 'text':
             text = json_data['events'][0]['message']['text']
-            if text == '雷達回波圖' or text == '雷達回波':
+            if text == '雷達':
                 line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
                 img_url = f'https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-001.png?{time.time_ns()}'
                 img_message = ImageSendMessage(original_content_url=img_url, preview_image_url=img_url)
