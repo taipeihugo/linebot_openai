@@ -13,6 +13,7 @@ app = Flask(__name__)
 # Channel Access Token and Channel Secret (從環境變數取得或自行設定)
 access_token = os.getenv('CHANNEL_ACCESS_TOKEN', '你的 Access Token')
 channel_secret = os.getenv('CHANNEL_SECRET', '你的 Channel Secret')
+weath_api = os.getenv('WEATHER_API', '你的 Weather API')
 
 # Line API 初始化
 line_bot_api = LineBotApi(access_token)
@@ -22,7 +23,7 @@ handler = WebhookHandler(channel_secret)
 # 地震查詢功能，整合中央氣象局地震資料的 API
 def earth_quake():
     result = []
-    code = 'WEATHER_API'  # 你的天氣 API 授權碼
+    code = weath_api  # 你的天氣 API 授權碼
     try:
         # 小區域地震
         url1 = f'https://opendata.cwa.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization={code}'
@@ -76,7 +77,6 @@ def linebot():
                     line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=reply[1], preview_image_url=reply[1]))
             else:
                 text_message = TextSendMessage(text=text)  # 回應接收到的其他文字訊息
-                text_message = f"你說了: {text_message}"
                 line_bot_api.reply_message(reply_token, text_message)
     except Exception as e:
         print(e)  # 發生錯誤時印出錯誤訊息
