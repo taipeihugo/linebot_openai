@@ -109,17 +109,21 @@ def weather(address):
         req = requests.get(url)
         data = req.json()
         records = data['records']
-        for item in records:
-            county = item['county']      # 縣市
-            sitename = item['sitename']  # 區域
-            name = f'{county}{sitename}'
-            aqi = int(item['aqi'])       # AQI 數值
-            aqi_status = ['良好', '普通', '對敏感族群不健康', '對所有族群不健康', '非常不健康', '危害']
-            msg = aqi_status[aqi // 50]  # 除以五十之後無條件捨去，取得整數
+       for item in records:
+           county = item['county']
+           sitename = item['sitename']
+           name = f'{county}{sitename}'
+           aqi = item['aqi']  # 先不轉換成整數，檢查是否為有效數字
+            
+           if aqi.isdigit():
+               aqi = int(aqi)
+               aqi_status = ['良好', '普通', '對敏感族群不健康', '對所有族群不健康', '非常不健康', '危害']
+               msg = aqi_status[aqi // 50]
+               result[name] = f'AQI：{aqi}，空氣品質{msg}'
+           else:
+               # 如果 AQI 不是有效數字，可以提供一個預設訊息
+               result[name] = '無法取得 AQI 數據'
 
-            for k in result:
-                if name in k:
-                    result[k] += f'\n\nAQI：{aqi}，空氣品質{msg}。'
     except Exception as e:
         print(f"Error fetching AQI data: {e}")
 
