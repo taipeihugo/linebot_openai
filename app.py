@@ -71,7 +71,6 @@ def weather(address):
     except:
         pass
 
-
     # 氣象預報
     api_list = {"宜蘭縣":"F-D0047-001","桃園市":"F-D0047-005","新竹縣":"F-D0047-009","苗栗縣":"F-D0047-013",
         "彰化縣":"F-D0047-017","南投縣":"F-D0047-021","雲林縣":"F-D0047-025","嘉義縣":"F-D0047-029",
@@ -110,17 +109,14 @@ def weather(address):
         req = requests.get(url)
         data = req.json()
         records = data['records']
-        print(records)
         for item in records:
             county = item['county']      # 縣市
             sitename = item['sitename']  # 區域
             name = f'{county}{sitename}'
-            
             aqi = int(item['aqi'])       # AQI 數值
             aqi_status = ['良好','普通','對敏感族群不健康','對所有族群不健康','非常不健康','危害']
             msg = aqi_status[aqi//50]    # 除以五十之後無條件捨去，取得整數
-            # print(f'name = {name}')
-            # print(f'\n\nAQI：{aqi}，空氣品質{msg}')
+
             for k in result:
                 if name in k:
                     result[k] = result[k] + f'\n\nAQI：{aqi}，空氣品質{msg}。'
