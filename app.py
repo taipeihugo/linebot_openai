@@ -182,9 +182,9 @@ def linebot():
                     sec = math.ceil(time.time())
                     reply = reply + f'snapshot?t={sec}'
                     line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=reply, preview_image_url=reply))
-                else:
-                    text_message = TextSendMessage(text=text)
-                    line_bot_api.reply_message(reply_token,text_message)
+                #else:
+                    #text_message = TextSendMessage(text=text)
+                    #line_bot_api.reply_message(reply_token,text_message)
         elif type == 'location':
             line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
             address = json_data['events'][0]['message']['address'].replace('台','臺')  # 取出地址資訊，並將「台」換成「臺」
