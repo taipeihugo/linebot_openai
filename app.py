@@ -182,8 +182,8 @@ def linebot():
                     sec = math.ceil(time.time())
                     reply = reply + f'snapshot?t={sec}'
                     line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=reply, preview_image_url=reply))
-                #else:
-                    #text_message = TextSendMessage(text=text)
+                else:
+                    text_message = TextSendMessage(text=text)
                     #line_bot_api.reply_message(reply_token,text_message)
         elif type == 'location':
             line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
