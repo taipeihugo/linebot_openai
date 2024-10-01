@@ -171,11 +171,9 @@ def linebot():
             elif text == '地震':
                 #line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
                 reply = earth_quake()
-                text_message = TextSendMessage(text=reply[0])
-                line_bot_api.reply_message(reply_token,text_message)
-                #line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=reply[1], preview_image_url=reply[1]))
-                img_message = ImageSendMessage(original_content_url=reply[1], preview_image_url=reply[1])
-                line_bot_api.reply_message(reply_token, img_message)
+                text_message = TextSendMessage(text = reply[0])
+                line_bot_api.reply_message(reply_token, text_message)
+                line_bot_api.push_message(user_id, ImageSendMessage(original_content_url = reply[1], preview_image_url = reply[1]))
             else:
                 reply = cctv(text)
                 if not reply == '':
