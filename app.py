@@ -8,7 +8,6 @@ import time
 import requests
 import traceback
 import threading
-import schedule
 
 app = Flask(__name__)
 
@@ -209,11 +208,3 @@ def welcome(event):
 
 if __name__ == "__main__":
     app.run()
-
-# 防止網頁伺服器關機
-def job():
-    print("每10分鐘執行1次")
-schedule.every(10).minutes.do(job)
-while True:
-    schedule.run_pending()
-    time.sleep(1)
