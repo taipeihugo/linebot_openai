@@ -22,36 +22,6 @@ handler = WebhookHandler(channel_secret)
 # 你的天氣 API 授權碼
 code = weather_api 
 
-headers = {'Authorization':f'Bearer {access_token}','Content-Type':'application/json'}
-body = {
-    'size': {'width': 2500, 'height': 1686},  # Adjust to match image size
-    'selected': 'true',
-    'name': 'Weather Menu',
-    'chatBarText': 'Tap here!',
-    'areas': [
-        {
-            'bounds': {'x': 0, 'y': 0, 'width': 1250, 'height': 843},
-            'action': {'type': 'message', 'text': '雷達回波圖'}
-        },
-        {
-            'bounds': {'x': 1250, 'y': 0, 'width': 1250, 'height': 843},
-            'action': {'type': 'message', 'text': '地震資訊'}
-        }
-    ]
-}
-menu_response = requests.post('https://api.line.me/v2/bot/richmenu', headers=headers, data=json.dumps(body))
-menu_id = json.loads(menu_response.text).get('richMenuId')
-
-# 向指定網址發送 request
-req = requests.request('POST', 'https://api.line.me/v2/bot/richmenu',
-                      headers=headers,data=json.dumps(body).encode('utf-8'))
-
-# Upload the image
-with open("line-bot-weather-demo.jpg", 'rb') as f:
-    line_bot_api.set_rich_menu_image(menu_id, "image/jpeg", f)
-
-
-
 # 地震查詢功能，整合中央氣象局地震資料的 API
 def earth_quake():
     result = []     
@@ -203,7 +173,9 @@ def linebot():
                 reply = earth_quake()
                 text_message = TextSendMessage(text=reply[0])
                 line_bot_api.reply_message(reply_token,text_message)
-                line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=reply[1], preview_image_url=reply[1]))
+                #line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=reply[1], preview_image_url=reply[1]))
+                img_message = ImageSendMessage(original_content_url=reply[1], preview_image_url=reply[1])
+                line_bot_api.reply_message(reply_token, img_message)
             else:
                 reply = cctv(text)
                 if not reply == '':
