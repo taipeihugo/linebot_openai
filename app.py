@@ -165,12 +165,12 @@ def linebot():
         if type == 'text':
             text = json_data['events'][0]['message']['text']
             if text == '雷達':
-                line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
+                #line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
                 img_url = f'https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-001.png?{time.time_ns()}'
                 img_message = ImageSendMessage(original_content_url=img_url, preview_image_url=img_url)
                 line_bot_api.reply_message(reply_token,img_message)
             elif text == '地震':
-                line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
+                #line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
                 reply = earth_quake()
                 text_message = TextSendMessage(text=reply[0])
                 line_bot_api.reply_message(reply_token,text_message)
@@ -187,7 +187,7 @@ def linebot():
                     text_message = TextSendMessage(text=text)
                     #line_bot_api.reply_message(reply_token,text_message)
         elif type == 'location':
-            line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
+            #line_bot_api.push_message(user_id, TextSendMessage(text='馬上找給你！抓取資料中....'))
             address = json_data['events'][0]['message']['address'].replace('台','臺')  # 取出地址資訊，並將「台」換成「臺」
             reply = weather(address)
             text_message = TextSendMessage(text=reply)
