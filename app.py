@@ -210,6 +210,6 @@ if __name__ == "__main__":
     app.run()
 
 # 啟動定期任務的執行緒
-thread = threading.Thread(target=periodic_task)
+thread = threading.Thread(target=linebot)
 thread.daemon = True
 thread.start()
