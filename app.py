@@ -7,7 +7,6 @@ import json
 import time
 import requests
 import traceback
-import threading
 
 app = Flask(__name__)
 
@@ -206,14 +205,5 @@ def welcome(event):
     message = TextSendMessage(text=f'{name} 歡迎加入')
     line_bot_api.reply_message(event.reply_token, message)
 
-# 每1分鐘執行的函數
-def periodic_task():
-    print("每1分鐘執行一次的任務")
-    img_url = f'https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-001.png?{time.time_ns()}'
-    img_message = ImageSendMessage(original_content_url=img_url, preview_image_url=img_url)
-    line_bot_api.reply_message(reply_token,img_message)
-    threading.Timer(60, periodic_task).start()
-
 if __name__ == "__main__":
-    threading.Timer(60, periodic_task).start()  # 在應用啟動時，每分鐘執行一次 periodic_task
     app.run()
