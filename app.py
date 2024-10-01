@@ -7,6 +7,7 @@ import json
 import time
 import requests
 import traceback
+import threading
 
 app = Flask(__name__)
 
@@ -207,3 +208,8 @@ def welcome(event):
 
 if __name__ == "__main__":
     app.run()
+
+# 啟動定期任務的執行緒
+thread = threading.Thread(target=periodic_task)
+thread.daemon = True
+thread.start()
